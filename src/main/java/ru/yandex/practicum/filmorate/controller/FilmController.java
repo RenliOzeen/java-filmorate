@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 public class FilmController {
     private HashMap<Integer, Film> films = new HashMap<>();
-    private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1985, 12, 28);
+    private static final LocalDate MIN_RELEASE_DATE = LocalDate.of(1895, 12, 28);
 
     /**
      * Обработчик GET-запроса на получение списка добавленных фильмов
