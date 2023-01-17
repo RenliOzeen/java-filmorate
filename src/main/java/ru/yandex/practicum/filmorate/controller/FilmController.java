@@ -36,9 +36,7 @@ public class FilmController {
      */
     @PostMapping
     public Film add(@Valid @RequestBody Film film) {
-        if (film.getId() == null) {
-            film.setId((long) films.size() + 1);
-        }
+        film.setId((long) films.size() + 1);
         films.put(film.getId(), film);
         log.info("New film added: {}", film);
 

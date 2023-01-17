@@ -35,9 +35,7 @@ public class UserController {
      */
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        if (user.getId() == null) {
-            user.setId((long) users.size() + 1);
-        }
+        user.setId((long) users.size() + 1);
         validation(user);
         users.put(user.getId(), user);
         log.info("New user added: {}", user);

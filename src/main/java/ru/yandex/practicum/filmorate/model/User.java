@@ -22,6 +22,6 @@ public class User {
     private String name;
 
     @NotNull
-    @Past(message = "The user's date of birth is later than the current date")
+    @PastOrPresent(message = "The user's date of birth is later than the current date")
     private LocalDate birthday;
 }
