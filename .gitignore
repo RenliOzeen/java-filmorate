@@ -1,8 +1,12 @@
 HELP.md
+README.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+lombok.config
+suppressions.xml
+checkstyle.xml
 
 ### STS ###
 .apt_generated

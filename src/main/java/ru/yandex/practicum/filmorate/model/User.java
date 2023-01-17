@@ -3,20 +3,25 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
 @Builder
 public class User {
-    private int id;
-    @Email
+    private Long id;
+
+    @NotEmpty
+    @Email(message = "Incorrect email")
     private String email;
-    @NotNull
+
+    @NotBlank(message = "Login is empty")
+    @Pattern(regexp = "\\S*", message = "Login contains spaces")
     private String login;
+
     private String name;
+
     @NotNull
+    @Past(message = "The user's date of birth is later than the current date")
     private LocalDate birthday;
 }
