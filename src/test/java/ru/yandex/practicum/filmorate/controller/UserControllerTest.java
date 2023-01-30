@@ -2,7 +2,10 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
 
@@ -10,10 +13,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
     UserController controller;
+    UserStorage userStorage;
+    UserService userService;
+
+    @Autowired
+    public UserControllerTest(UserStorage userStorage, UserService userService){
+        this.userStorage=userStorage;
+        this.userService=userService;
+    }
 
     @BeforeEach
     public void setup() {
-        controller = new UserController();
+        controller = new UserController(userStorage,userService);
     }
 
     /**

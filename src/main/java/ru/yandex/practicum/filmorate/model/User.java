@@ -1,10 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Builder
@@ -24,4 +24,6 @@ public class User {
     @NotNull
     @PastOrPresent(message = "The user's date of birth is later than the current date")
     private LocalDate birthday;
+
+    private Set<Long> friends;
 }
