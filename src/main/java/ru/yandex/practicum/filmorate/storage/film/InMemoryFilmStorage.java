@@ -11,7 +11,7 @@ import java.util.*;
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
 
-    private Map<Long, Film> films = new HashMap<>();
+    private final Map<Long, Film> films = new HashMap<>();
 
     @Override
     public List<Film> findAll() {

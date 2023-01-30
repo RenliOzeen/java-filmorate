@@ -50,9 +50,8 @@ public class FilmService {
      * @return
      */
     public List<Film> getRating(int count) {
-        return filmStorage.findAll().stream().sorted((film1, film2) -> {
-            int value = film2.getLikes().size() - film1.getLikes().size();
-            return value;
-        }).limit(count).collect(Collectors.toList());
+        return filmStorage.findAll().stream().sorted((film1, film2) ->
+                        film2.getLikes().size() - film1.getLikes().size())
+                .limit(count).collect(Collectors.toList());
     }
 }

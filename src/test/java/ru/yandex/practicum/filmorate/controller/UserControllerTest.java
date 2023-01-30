@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
@@ -38,7 +37,7 @@ class UserControllerTest {
                 .build();
 
         controller.create(user);
-        assertTrue(controller.findAll().get(0).getName().equals("login"));
+        assertEquals("login", controller.findAll().get(0).getName());
 
     }
 }

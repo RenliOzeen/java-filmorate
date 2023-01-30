@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import javax.validation.Valid;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
@@ -16,16 +16,11 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/films")
+@RequiredArgsConstructor
 @Slf4j
 public class FilmController {
     private final FilmStorage filmStorage;
     private final FilmService filmService;
-
-    @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
-        this.filmService = filmService;
-    }
 
     /**
      * Обработчик GET-запроса на получение списка добавленных фильмов
