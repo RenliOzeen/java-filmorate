@@ -1,9 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -13,9 +16,11 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 @Slf4j
 public class UserController {
-    private Map<Long, User> users = new HashMap<>();
+    private final UserStorage userStorage;
+    private final UserService userService;
 
     /**
      * Обработчик GET-запроса на получение списка всех пользователей
@@ -24,7 +29,7 @@ public class UserController {
      */
     @GetMapping
     public List<User> findAll() {
-        return new ArrayList<>(users.values());
+        return userStorage.findAll();
     }
 
     /**
@@ -35,12 +40,7 @@ public class UserController {
      */
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        user.setId((long) users.size() + 1);
-        validation(user);
-        users.put(user.getId(), user);
-        log.info("New user added: {}", user);
-
-        return user;
+        return userStorage.create(user);
     }
 
     /**
@@ -52,25 +52,62 @@ public class UserController {
      */
     @PutMapping
     public User update(@Valid @RequestBody User user) throws ValidationException {
-        if (users.containsKey(user.getId())) {
-            validation(user);
-            users.put(user.getId(), user);
-            log.info("User data updated: {}", user);
-        } else {
-            throw new ValidationException("Validation Error");
-        }
-        return user;
+        return userStorage.update(user);
     }
 
     /**
-     * Метод валидации пользователей
+     * Обработчик GET запроса на получение пользователя по его id
      *
-     * @param user
+     * @param id
+     * @return экземпляр класса User
      */
-    private void validation(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-            log.info("There is no name to display, login will be used");
-        }
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable String id) {
+        return userStorage.getUser(Long.parseLong(id));
+    }
+
+    /**
+     * Обработчик PUT запроса на добавление пользователя в друзья
+     *
+     * @param id       пользователя, кто добавляет
+     * @param friendId пользователя, кого добавляем
+     */
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable String id, @PathVariable String friendId) {
+        userService.addFriend(Long.parseLong(id), Long.parseLong(friendId));
+    }
+
+    /**
+     * Обработчик DELETE запроса на удаление из друзей
+     *
+     * @param id       пользователя, кто удаляет
+     * @param friendId пользователя, кого удаляем
+     */
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable String id, @PathVariable String friendId) {
+        userService.deleteFriend(Long.parseLong(id), Long.parseLong(friendId));
+    }
+
+    /**
+     * Обработчик GET запроса на получение списка друзей пользователя по его id
+     *
+     * @param id
+     * @return List с объектами типа User
+     */
+    @GetMapping("/{id}/friends")
+    public List<User> getUserFriends(@PathVariable String id) {
+        return userService.getUserFriends(Long.parseLong(id));
+    }
+
+    /**
+     * Обработчик GET запроса на получение списка общих друзей двух пользователей по их id
+     *
+     * @param id
+     * @param otherId
+     * @return List с объектами типа User
+     */
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getMutualFriends(@PathVariable String id, @PathVariable String otherId) {
+        return userService.getMutualFriends(Long.parseLong(id), Long.parseLong(otherId));
     }
 }
