@@ -1,11 +1,13 @@
-package ru.yandex.practicum.filmorate.storage.user;
+package ru.yandex.practicum.filmorate.storage.User;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.constraints.Negative;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -47,6 +49,39 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException("The user with this id was not found");
         }
         return users.get(id);
+    }
+
+    @Override
+    public User addFriend(Long userId, Long friendId) {
+        getUser(userId).getFriends().add(friendId);
+        getUser(friendId).getFriends().add(userId);
+        return getUser(userId);
+    }
+
+    @Override
+    public List<User> getFriends(Long userId) {
+        return findAll().stream()
+                .filter(user -> user.getFriends().contains(userId))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public User deleteFriend(Long userId, Long friendId) {
+        getUser(userId).getFriends().remove(friendId);
+        getUser(friendId).getFriends().remove(userId);
+        return getUser(userId);
+    }
+
+    @Override
+    public List<User> getMutualFriends(Long userId, Long otherId) {
+        List<User> mutualFriends = new ArrayList<>();
+        for (Long id : getUser(userId).getFriends()) {
+            if (getUser(otherId).getFriends().contains(id)) {
+                mutualFriends.add(getUser(id));
+            }
+        }
+        return mutualFriends;
     }
 
     /**
