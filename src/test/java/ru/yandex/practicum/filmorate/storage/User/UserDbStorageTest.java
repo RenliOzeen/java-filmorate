@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -18,12 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class UserDbStorageTest {
     private final UserDbStorage userDbStorage;
+    private final JdbcTemplate jdbcTemplate;
     User user;
     User friend;
     User mutualFriend;
 
     @BeforeEach
     public void setup() {
+        jdbcTemplate.update("DELETE FROM users");
+        jdbcTemplate.update("DELETE FROM friends");
         user = User.builder()
                 .email("mail@mail.mail")
                 .login("login")
@@ -68,14 +72,15 @@ class UserDbStorageTest {
      */
     @Test
     void shouldAddAndDeleteFriends() {
+        userDbStorage.create(user);
         userDbStorage.create(friend);
-        userDbStorage.addFriend(1L, 2L);
-        assertTrue(userDbStorage.getFriends(1L).size()==1);
-        assertTrue(userDbStorage.getFriends(2L).size()==0);
+        userDbStorage.addFriend(user.getId(), friend.getId());
+        assertTrue(userDbStorage.getFriends(user.getId()).size()==1);
+        assertTrue(userDbStorage.getFriends(friend.getId()).size()==0);
 
-        userDbStorage.deleteFriend(1L, 2L);
-        assertTrue(userDbStorage.getFriends(1L).size()==0);
-        assertTrue(userDbStorage.getFriends(2L).size()==0);
+        userDbStorage.deleteFriend(user.getId(), friend.getId());
+        assertTrue(userDbStorage.getFriends(user.getId()).size()==0);
+        assertTrue(userDbStorage.getFriends(friend.getId()).size()==0);
     }
 
     /**
@@ -83,9 +88,11 @@ class UserDbStorageTest {
      */
     @Test
     void shouldGetMutualFriends() {
+        userDbStorage.create(user);
+        userDbStorage.create(friend);
         userDbStorage.create(mutualFriend);
-        userDbStorage.addFriend(1L, 3L);
-        userDbStorage.addFriend(2L, 3L);
-        assertTrue(userDbStorage.getMutualFriends(1L, 2L).get(0).getId()==3L);
+        userDbStorage.addFriend(user.getId(), mutualFriend.getId());
+        userDbStorage.addFriend(friend.getId(), mutualFriend.getId());
+        assertTrue(userDbStorage.getMutualFriends(user.getId(), friend.getId()).get(0).getId()==mutualFriend.getId());
     }
 }
