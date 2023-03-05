@@ -2,8 +2,7 @@
 Template repository for Filmorate project.
 
 
-![Схема](https://user-images.githubusercontent.com/103331774/218330964-f5740a50-483b-4c8f-b223-6c060b8d8f68.png)
-
+![Схема](https://user-images.githubusercontent.com/103331774/222956601-13def5db-b7a6-4b3c-bfb8-a3e7cef64c31.png)
 
 
 Запрос на получение списка всех пользователей:
