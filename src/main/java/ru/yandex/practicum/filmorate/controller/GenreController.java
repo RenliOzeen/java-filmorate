@@ -21,7 +21,7 @@ public class GenreController {
 
     /**
      * Обработчик GET запроса на получение списка всех жанров
-     * @return
+     * @return список экземпляров Genre
      */
     @GetMapping
     public List<Genre> findAll() {
@@ -31,7 +31,7 @@ public class GenreController {
     /**
      * Обработчик GET запроса на получение жанра по его id
      * @param genreId
-     * @return
+     * @return экземпляр класса Genre
      */
     @GetMapping("/{id}")
     public Genre getGenre(@PathVariable("id") Long genreId) {

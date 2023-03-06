@@ -30,7 +30,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> findAll() {
         List<Film> films = new ArrayList<>();
-        SqlRowSet filmRows = jdbcTemplate.queryForRowSet("SELECT * FROM films");
+        SqlRowSet filmRows = jdbcTemplate.queryForRowSet("SELECT film_id, name, description, release_date, duration, rating_mpa_id FROM films");
         while (filmRows.next()) {
             Film film = Film.builder()
                     .id(filmRows.getLong("film_id"))
@@ -79,7 +79,8 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilm(Long filmId) {
-        String sqlQuery = "SELECT * FROM films WHERE film_id=?";
+        String sqlQuery = "SELECT film_id, name, description, release_date, duration, rating_mpa_id " +
+                "FROM films WHERE film_id=?";
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToFilm, filmId);
         } catch (RuntimeException e) {
@@ -123,7 +124,7 @@ public class FilmDbStorage implements FilmStorage {
 
 
     /**
-     *Вспомогательные методы преобразования фильмов
+     * Вспомогательные методы преобразования фильмов
      */
     private Film mapRowToFilm(ResultSet resultSet, int rowNum) throws SQLException {
         Film film = Film.builder()

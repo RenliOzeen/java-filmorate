@@ -21,11 +21,12 @@ public class GenreDbStorage {
 
     /**
      * Получение списка всех жанров
-     * @return
+     *
+     * @return список экземпляров Genre
      */
     public List<Genre> findAll() {
         List<Genre> genreList = new ArrayList<>();
-        SqlRowSet genreRows = jdbcTemplate.queryForRowSet("SELECT * FROM genre_type");
+        SqlRowSet genreRows = jdbcTemplate.queryForRowSet("SELECT genre_id, name FROM genre_type");
         while (genreRows.next()) {
             Genre genre = Genre.builder()
                     .id(genreRows.getLong("genre_id"))
@@ -38,12 +39,14 @@ public class GenreDbStorage {
 
     /**
      * Получение множества всех жанров конкретного фильма по его id
+     *
      * @param id
-     * @return
+     * @return множество экземпляров Genre
      */
     public Set<Genre> getGenreForCurrentFilm(Long id) {
         Set<Genre> genreSet = new HashSet<>();
-        SqlRowSet genreRows = jdbcTemplate.queryForRowSet("SELECT * FROM genre ORDER BY genre_id ASC");
+        SqlRowSet genreRows = jdbcTemplate.queryForRowSet("SELECT id, film_id, genre_id FROM genre " +
+                "ORDER BY genre_id ASC");
         while (genreRows.next()) {
             if (genreRows.getLong("film_id") == id) {
                 genreSet.add(getGenreForId(genreRows.getLong("genre_id")));
@@ -54,11 +57,12 @@ public class GenreDbStorage {
 
     /**
      * Добавление жанров конкретному фильму
+     *
      * @param film
-     * @return
+     * @return экземпляр Film
      */
     public Film addGenresForCurrentFilm(Film film) {
-        if(film.getGenres() == null){
+        if (Objects.isNull(film.getGenres())) {
             return film;
         }
         film.getGenres().forEach(g -> {
@@ -72,8 +76,9 @@ public class GenreDbStorage {
 
     /**
      * Обновление жанров фильма
+     *
      * @param film
-     * @return
+     * @return экземпляр Film
      */
     public Film updateGenresForCurrentFilm(Film film) {
         String sqlQuery = "DELETE FROM genre WHERE film_id = ?";
@@ -84,11 +89,12 @@ public class GenreDbStorage {
 
     /**
      * Получение жанра по его id
+     *
      * @param id
-     * @return
+     * @return экземпляр Genre
      */
     public Genre getGenreForId(Long id) {
-        String sqlQuery = "SELECT * FROM genre_type WHERE genre_id=?";
+        String sqlQuery = "SELECT genre_id, name FROM genre_type WHERE genre_id=?";
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToGenre, id);
         } catch (RuntimeException e) {
@@ -99,11 +105,12 @@ public class GenreDbStorage {
 
     /**
      * Метод для добавления названия жанра в объект жанра, хранящийся в фильме
+     *
      * @param film
-     * @return
+     * @return экземпляр Film
      */
-    public Film addGenreNameToFilm(Film film){
-        if(film.getGenres()==null){
+    public Film addGenreNameToFilm(Film film) {
+        if (Objects.isNull(film.getGenres())) {
             return film;
         }
         film.getGenres().forEach(g -> g.setName(getGenreForId(g.getId()).getName()));

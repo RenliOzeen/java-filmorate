@@ -13,20 +13,20 @@ public class UserService {
     private final UserStorage userStorage;
 
     public User addFriend(Long userId, Long friendId) {
-        userStorage.addFriend(userId,friendId);
+        userStorage.addFriend(userId, friendId);
         return userStorage.getUser(userId);
     }
 
     public User deleteFriend(Long userId, Long friendId) {
         userStorage.deleteFriend(userId, friendId);
-        return  userStorage.getUser(userId);
+        return userStorage.getUser(userId);
     }
 
     public List<User> getUserFriends(Long userId) {
         return userStorage.getFriends(userId);
     }
 
-    public List<User> getMutualFriends(Long userId, Long otherId){
+    public List<User> getMutualFriends(Long userId, Long otherId) {
         return userStorage.getMutualFriends(userId, otherId);
     }
 }

@@ -88,9 +88,9 @@ class FilmDbStorageTest {
 
         film.setName("updateName");
         filmDbStorage.update(film);
-        assertTrue(filmDbStorage.getFilm(film.getId()).getName().equals("updateName"));
+        assertEquals("updateName", filmDbStorage.getFilm(film.getId()).getName());
 
-        assertTrue(filmDbStorage.findAll().size() == 1);
+        assertEquals(1, filmDbStorage.findAll().size());
     }
 
     /**
@@ -113,4 +113,5 @@ class FilmDbStorageTest {
         filmDbStorage.deleteLike(1L, 1L);
         assertTrue(likeDbStorage.getLikesForCurrentFilm(1L).isEmpty());
     }
+
 }

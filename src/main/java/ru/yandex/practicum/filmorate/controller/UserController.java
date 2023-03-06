@@ -29,6 +29,7 @@ public class UserController {
      */
     @GetMapping
     public List<User> findAll() {
+        log.info("Получен GET-запрос на получение списка всех пользователей");
         return userStorage.findAll();
     }
 
@@ -40,6 +41,7 @@ public class UserController {
      */
     @PostMapping
     public User create(@Valid @RequestBody User user) {
+        log.info("Получен POST-запрос на создание пользователя");
         return userStorage.create(user);
     }
 
@@ -52,6 +54,7 @@ public class UserController {
      */
     @PutMapping
     public User update(@Valid @RequestBody User user) throws ValidationException {
+        log.info("Получен PUT-запрос на обновление пользователя");
         return userStorage.update(user);
     }
 
@@ -63,6 +66,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public User getUser(@PathVariable String id) {
+        log.info("Получен GET-запрос на получение пользователя");
         return userStorage.getUser(Long.parseLong(id));
     }
 
@@ -74,6 +78,7 @@ public class UserController {
      */
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable String id, @PathVariable String friendId) {
+        log.info("Получен PUT-запрос на добавление в друзья");
         userService.addFriend(Long.parseLong(id), Long.parseLong(friendId));
     }
 
@@ -85,6 +90,7 @@ public class UserController {
      */
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFriend(@PathVariable String id, @PathVariable String friendId) {
+        log.info("Получен DELETE-запрос на удаление из друзей");
         userService.deleteFriend(Long.parseLong(id), Long.parseLong(friendId));
     }
 
@@ -96,6 +102,7 @@ public class UserController {
      */
     @GetMapping("/{id}/friends")
     public List<User> getUserFriends(@PathVariable String id) {
+        log.info("Получен GET-запрос на получение списка друзей пользователя");
         return userService.getUserFriends(Long.parseLong(id));
     }
 
@@ -108,6 +115,7 @@ public class UserController {
      */
     @GetMapping("/{id}/friends/common/{otherId}")
     public List<User> getMutualFriends(@PathVariable String id, @PathVariable String otherId) {
+        log.info("Получен GET-запрос на получение списка обших друзей двух пользователей");
         return userService.getMutualFriends(Long.parseLong(id), Long.parseLong(otherId));
     }
 }

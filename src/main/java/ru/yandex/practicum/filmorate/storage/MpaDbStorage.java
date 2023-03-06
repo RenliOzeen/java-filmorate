@@ -20,11 +20,11 @@ public class MpaDbStorage {
 
     /**
      * Получение списка всех Mpa
-     * @return
+     * @return список экземпляров Mpa
      */
     public List<Mpa> findAll(){
         List<Mpa> mpaList=new ArrayList<>();
-        SqlRowSet mpaRows = jdbcTemplate.queryForRowSet("SELECT * FROM mpa_type");
+        SqlRowSet mpaRows = jdbcTemplate.queryForRowSet("SELECT rating_mpa_id, name FROM mpa_type");
         while (mpaRows.next()) {
             Mpa mpa=Mpa.builder()
                     .id(mpaRows.getLong("rating_mpa_id"))
@@ -39,10 +39,10 @@ public class MpaDbStorage {
     /**
      * Получение экземпляра Mpa по его id
      * @param mpaId
-     * @return
+     * @return экземпляр Mpa
      */
     public Mpa getMpa(Long mpaId){
-        String sqlQuery= "SELECT * FROM mpa_type WHERE rating_mpa_id=?";
+        String sqlQuery= "SELECT rating_mpa_id, name FROM mpa_type WHERE rating_mpa_id=?";
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToMpa, mpaId);
         } catch (RuntimeException e){
@@ -53,7 +53,7 @@ public class MpaDbStorage {
     /**
      * Добавление Mpa к экзмпляру фильма
      * @param film
-     * @return
+     * @return экземпляр Film
      */
     public Film addMpaToFilm(Film film){
         findAll().forEach(mpa -> {
@@ -64,13 +64,6 @@ public class MpaDbStorage {
         return film;
     }
 
-    /**
-     * Вспомогательный метод для преобразования Mpa-рейтингов
-     * @param resultSet
-     * @param rowNum
-     * @return
-     * @throws SQLException
-     */
     private Mpa mapRowToMpa(ResultSet resultSet, int rowNum) throws SQLException {
         Mpa mpa = Mpa.builder()
                 .id(resultSet.getLong("rating_mpa_id"))

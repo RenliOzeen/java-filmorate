@@ -75,7 +75,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUser(Long id) {
-        String sqlQuery = "SELECT * FROM users WHERE user_id=?";
+        String sqlQuery = "SELECT user_id, email, login, name, birthday FROM users WHERE user_id=?";
         try {
             return jdbcTemplate.queryForObject(sqlQuery, this::mapRowToUser, id);
         } catch (RuntimeException e) {
@@ -85,7 +85,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriends(Long userId) {
-        String sqlQuery = "SELECT * FROM users WHERE user_id IN(SELECT friend_id FROM friends WHERE user_id=?)";
+        String sqlQuery = "SELECT user_id, email, login, name, birthday FROM users WHERE user_id IN" +
+                "(SELECT friend_id FROM friends WHERE user_id=?)";
         List<User> friendList = new ArrayList<>();
         friendList.addAll(jdbcTemplate.query(sqlQuery, this::mapRowToUser, userId));
         return friendList;
@@ -93,8 +94,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getMutualFriends(Long userId, Long otherId) {
-        List<User> mutualFriendsList=new ArrayList<>();
-        String sqlQuery = "SELECT * FROM users WHERE user_id IN(" +
+        List<User> mutualFriendsList = new ArrayList<>();
+        String sqlQuery = "SELECT user_id, email, login, name, birthday FROM users WHERE user_id IN(" +
                 "SELECT friend_id FROM friends WHERE user_id = ?) " +
                 "AND user_id IN(SELECT friend_id FROM friends WHERE user_id = ?)";
         mutualFriendsList.addAll(jdbcTemplate.query(sqlQuery, this::mapRowToUser, userId, otherId));
@@ -106,7 +107,7 @@ public class UserDbStorage implements UserStorage {
         User user = getUser(userId);
         try {
             getUser(friendId);
-        } catch(RuntimeException e){
+        } catch (RuntimeException e) {
             throw new NotFoundException("This user was not found in the database");
         }
         String sqlQuery = "INSERT INTO friends (user_id, friend_id) VALUES(?, ?)";
@@ -124,7 +125,6 @@ public class UserDbStorage implements UserStorage {
 
     /**
      * Вспомогательные методы преобразования пользователей
-     *
      */
     private Map<String, Object> toMap(User user) {
         Map<String, Object> values = new HashMap<>();

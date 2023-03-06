@@ -22,12 +22,6 @@ public interface UserStorage {
      */
     public User create(User user);
 
-    /**
-     * Метод для обновления данных пользователя
-     *
-     * @param user
-     * @return
-     */
     public User update(User user);
 
     /**

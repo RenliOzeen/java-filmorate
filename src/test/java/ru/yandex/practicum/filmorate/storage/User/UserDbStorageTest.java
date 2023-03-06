@@ -63,7 +63,7 @@ class UserDbStorageTest {
         userDbStorage.update(user);
         assertEquals(user, userDbStorage.getUser(user.getId()));
 
-        assertTrue(userDbStorage.findAll().size()==1);
+        assertTrue(userDbStorage.findAll().size() == 1);
         assertEquals(user, userDbStorage.getUser(user.getId()));
     }
 
@@ -75,12 +75,12 @@ class UserDbStorageTest {
         userDbStorage.create(user);
         userDbStorage.create(friend);
         userDbStorage.addFriend(user.getId(), friend.getId());
-        assertTrue(userDbStorage.getFriends(user.getId()).size()==1);
-        assertTrue(userDbStorage.getFriends(friend.getId()).size()==0);
+        assertTrue(userDbStorage.getFriends(user.getId()).size() == 1);
+        assertTrue(userDbStorage.getFriends(friend.getId()).size() == 0);
 
         userDbStorage.deleteFriend(user.getId(), friend.getId());
-        assertTrue(userDbStorage.getFriends(user.getId()).size()==0);
-        assertTrue(userDbStorage.getFriends(friend.getId()).size()==0);
+        assertTrue(userDbStorage.getFriends(user.getId()).size() == 0);
+        assertTrue(userDbStorage.getFriends(friend.getId()).size() == 0);
     }
 
     /**
@@ -93,6 +93,7 @@ class UserDbStorageTest {
         userDbStorage.create(mutualFriend);
         userDbStorage.addFriend(user.getId(), mutualFriend.getId());
         userDbStorage.addFriend(friend.getId(), mutualFriend.getId());
-        assertTrue(userDbStorage.getMutualFriends(user.getId(), friend.getId()).get(0).getId()==mutualFriend.getId());
+        assertTrue(userDbStorage.getMutualFriends(user.getId(), friend.getId()).get(0).getId() == mutualFriend.getId());
     }
+
 }
