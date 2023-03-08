@@ -29,6 +29,7 @@ public class FilmController {
      */
     @GetMapping
     public List<Film> findAll() {
+        log.info("Получен GET-запрос на получение списка всех фильмов");
         return filmStorage.findAll();
     }
 
@@ -40,6 +41,7 @@ public class FilmController {
      */
     @PostMapping
     public Film add(@Valid @RequestBody Film film) {
+        log.info("Получен POST-запрос на добавление фильма");
         return filmStorage.add(film);
     }
 
@@ -51,6 +53,7 @@ public class FilmController {
      */
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
+        log.info("Получен PUT-запрос на обновление фильма");
         return filmStorage.update(film);
     }
 
@@ -62,6 +65,7 @@ public class FilmController {
      */
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable String id) {
+        log.info("Получен GET-запрос на получение фильма");
         return filmStorage.getFilm(Long.parseLong(id));
     }
 
@@ -73,6 +77,7 @@ public class FilmController {
      */
     @PutMapping("/{id}/like/{userId}")
     public void putALike(@PathVariable String id, @PathVariable String userId) {
+        log.info("Получен PUT-запрос на постановку лайка фильму");
         filmService.putALike(Long.parseLong(id), Long.parseLong(userId));
     }
 
@@ -84,6 +89,7 @@ public class FilmController {
      */
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLike(@PathVariable String id, @PathVariable String userId) {
+        log.info("Получен DELETE-запрос на удаление лайка с фильма");
         filmService.deleteLike(Long.parseLong(id), Long.parseLong(userId));
     }
 
@@ -95,6 +101,7 @@ public class FilmController {
      */
     @GetMapping("/popular")
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") String count) {
+        log.info("Получен GET-запрос на получение топа популярных фильмов");
         return filmService.getRating(Integer.parseInt(count));
     }
 }
