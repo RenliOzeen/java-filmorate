@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import ru.yandex.practicum.filmorate.validator.ReleaseDate;
 
 import javax.validation.constraints.NotBlank;
@@ -14,24 +16,30 @@ import java.util.Set;
 
 @Data
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Film {
-    private Long id;
+    Long id;
 
     @NotBlank(message = "The title of the film is missing")
-    private String name;
+    String name;
 
 
     @NotBlank
     @Size(max = 200, message = "Maximum description length exceeded")
-    private String description;
+    String description;
 
     @NotNull
     @ReleaseDate(message = "Release date earlier than the minimum possible")
-    private LocalDate releaseDate;
+    LocalDate releaseDate;
 
     @Positive(message = "The duration of the movie is less than zero")
-    private long duration;
+    long duration;
 
-    private Set<Long> likes;
+    Mpa mpa;
+
+    Set<Genre> genres;
+
+    Set<Long> likes;
+
 
 }
